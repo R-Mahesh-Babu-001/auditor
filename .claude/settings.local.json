@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git commit *)",
+      "Bash(python -c \"import langchain; print\\(langchain.__version__\\)\")",
+      "Bash(python -c \"from langchain.agents import __all__; print\\([x for x in __all__ if 'tool' in x.lower\\(\\) or 'agent' in x.lower\\(\\)]\\)\")",
+      "Bash(python -c \"from langchain.agents import create_agent; help\\(create_agent\\)\")",
+      "Bash(python -c \"import langchain_core; print\\(langchain_core.__version__\\)\")",
+      "Bash(python -c \"from langchain_core.agents import __all__; print\\(__all__\\)\")",
+      "Bash(python -c \"from langchain.agents import AgentExecutor; print\\('AgentExecutor available'\\)\")",
+      "Bash(python -c \"from langchain.agents import create_agent; from langchain.agents import AgentState; print\\(AgentState.__annotations__\\)\")",
+      "Bash(Start-Process -NoNewWindow -FilePath \"python\" -ArgumentList \"-m uvicorn app.main:app --host 0.0.0.0 --port 8000\" -RedirectStandardOutput \"uvicorn_out.txt\" -RedirectStandardError \"uvicorn_err.txt\")"
+    ]
+  }
+}
