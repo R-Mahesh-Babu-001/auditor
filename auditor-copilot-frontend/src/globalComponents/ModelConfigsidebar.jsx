@@ -9,6 +9,11 @@ import { cn } from "../lib/utils";
 import PromptLibrary from "../components/chatInterfaceComponents/PromptLibrary";
 
 const MODEL_PROVIDERS = {
+  'gemini gcp': [
+    { name: "gemini-3.8-flash", available: true },
+    { name: "gemini-4-argon", available: true },
+    { name: "gemini-3.5-flash-lite", available: true },
+  ],
   'azure openai': [
     { name: "GPT-4o", available: false },
     { name: "GPT-3.5-turbo", available: false },
@@ -23,8 +28,8 @@ const MODEL_PROVIDERS = {
   ],
 };
 
-const DEFAULT_PROVIDER = "azure openai";
-const DEFAULT_MODEL = "gpt-5.2-chat";
+const DEFAULT_PROVIDER = "gemini gcp";
+const DEFAULT_MODEL = "gemini-3.8-flash";
 
 const ModelConfigSidebar = ({ setModel, setProvider }) => {
   const [collapsed, setCollapsed] = useState(true);
@@ -148,13 +153,14 @@ const ModelConfigSidebar = ({ setModel, setProvider }) => {
                   <SelectValue placeholder="Choose Provider" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="gemini gcp">Gemini (GCP)</SelectItem>
                   <SelectItem value="azure openai">Azure OpenAI</SelectItem>
                   <SelectItem value="awsbedrock">AWS Bedrock</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            {provider && (
+            {provider && MODEL_PROVIDERS[provider] && (
               <div>
                 <Label className="text-sm font-semibold text-foreground/80">Select Model</Label>
                 <Select value={model} onValueChange={handleModelChange}>
@@ -162,7 +168,7 @@ const ModelConfigSidebar = ({ setModel, setProvider }) => {
                     <SelectValue placeholder="Choose Model" />
                   </SelectTrigger>
                   <SelectContent>
-                    {MODEL_PROVIDERS[provider].map((modelOption) => (
+                    {(MODEL_PROVIDERS[provider] || []).map((modelOption) => (
                       <SelectItem
                         key={modelOption.name}
                         value={modelOption.name}

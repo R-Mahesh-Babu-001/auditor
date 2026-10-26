@@ -3,11 +3,13 @@ import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import mammoth from "mammoth";
 import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
+import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
 import secureLocalStorage from "react-secure-storage";
 
 // Configure the PDF.js worker.
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+if (pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+}
 
 // Configure these in the frontend .env file.
 // Never put database credentials directly in frontend code.

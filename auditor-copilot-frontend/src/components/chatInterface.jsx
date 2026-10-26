@@ -32,8 +32,13 @@ import { starterSuggestionsArray } from "../globalConstants/useCaseConstants"
 export default function ChatInterface({setConversation, action}) {
   // Messages state, initialized from localStorage for persistence
   const [messages, setMessages] = useState(() => {
-    const storedMessages = localStorage.getItem(`${action}-chatMessages`)
-    return storedMessages ? JSON.parse(storedMessages) : []
+    try {
+      const storedMessages = localStorage.getItem(`${action}-chatMessages`)
+      return storedMessages ? JSON.parse(storedMessages) : []
+    } catch (e) {
+      console.error("Failed to parse stored messages from localStorage:", e);
+      return [];
+    }
   })
 
   // Redux: get action info from store

@@ -15,8 +15,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("chat")
   const [conversation, setConversation] = useState("")
 
-  const [model, setModel] = useState(localStorage.getItem("model") || "gpt-5.2-chat");
-  const [provider, setProvider] = useState(localStorage.getItem("provider") || "azure openai");
+  const [model, setModel] = useState(localStorage.getItem("model") || "gemini-3.8-flash");
+  const [provider, setProvider] = useState(localStorage.getItem("provider") || "gemini gcp");
 
   const [cleared, setCleared] = useState(false);
 
@@ -144,7 +144,8 @@ export default function Home() {
             {/* </div> */}
             <span className="font-medium">
               Provider: <span className="text-primary">
-                {provider === "azure openai" ? "Azure OpenAI" : 
+                {provider === "gemini gcp" ? "Gemini (GCP)" :
+                 provider === "azure openai" ? "Azure OpenAI" : 
                  provider === "awsbedrock" ? "AWS Bedrock" : 
                  (provider || "None")}
               </span>

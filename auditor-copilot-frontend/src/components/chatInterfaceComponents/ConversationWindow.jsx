@@ -232,7 +232,8 @@ const ConversationWindow = ({ messages, setMessages }) => {
                               <div className="mt-2 pt-2 border-t border-border/40 flex gap-2 items-center opacity-70">
                                 {message.provider && (
                                   <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-                                    {message.provider === "azure openai" ? "Azure OpenAI" : 
+                                    {message.provider === "gemini gcp" || message.provider === "gemini_gcp" ? "Gemini (GCP)" :
+                                     message.provider === "azure openai" ? "Azure OpenAI" : 
                                      message.provider === "awsbedrock" ? "AWS Bedrock" : 
                                      message.provider}
                                   </span>
@@ -310,7 +311,8 @@ const ConversationWindow = ({ messages, setMessages }) => {
                           <div className="mt-2 pt-2 border-t border-border/40 flex gap-2 items-center opacity-70">
                             {message.provider && (
                               <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-                                {message.provider === "azure openai" ? "Azure OpenAI" : 
+                                {message.provider === "gemini gcp" || message.provider === "gemini_gcp" ? "Gemini (GCP)" :
+                                 message.provider === "azure openai" ? "Azure OpenAI" : 
                                  message.provider === "awsbedrock" ? "AWS Bedrock" : 
                                  message.provider}
                               </span>
