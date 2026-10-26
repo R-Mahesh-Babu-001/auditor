@@ -13,8 +13,8 @@ const UserInputs = ({showSuggestions, promptInputValue, message: messages, setMe
   
   const [complianceMode, setComplianceMode] = useState("IT");
 
-  const model = localStorage.getItem("model") || "gemini-3.8-flash";
-  const provider = localStorage.getItem("provider") || "gemini gcp";
+  const model = localStorage.getItem("model") || "gpt-5.2-chat";
+  const provider = localStorage.getItem("provider") || "azure openai";
 
   // Ensure a persistent user id for memory scoping
   const getUserId = () => {
@@ -89,9 +89,7 @@ const UserInputs = ({showSuggestions, promptInputValue, message: messages, setMe
 
       // Normalize provider for backend
       let backendProvider = provider;
-      if (provider === "gemini gcp" || provider === "gemini") {
-        backendProvider = "gemini_gcp";
-      } else if (provider === "azure openai") {
+      if (provider === "azure openai") {
         backendProvider = "azure_openai";
       } else if (provider === "awsbedrock") {
         backendProvider = "aws_bedrock";

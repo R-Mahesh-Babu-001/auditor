@@ -141,6 +141,7 @@ frontend/
 ## 6. API / Interface Documentation
 
 The frontend communicates with a backend service.
+
 **Base URL:** Configured via `VITE_BACKEND_BASE_URL`.
 
 **Key Interactions:**

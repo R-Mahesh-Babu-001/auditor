@@ -2,194 +2,154 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import mammoth from "mammoth";
-import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
+import * as PDFJS from "pdfjs-dist";
+import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
 import secureLocalStorage from "react-secure-storage";
 
-// Configure the PDF.js worker.
-if (pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
-}
+// Set PDF worker
+// Tell pdf.js where to find the worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
-// Configure these in the frontend .env file.
-// Never put database credentials directly in frontend code.
-const baseUrl = (
-  import.meta.env.VITE_AI_PLAYGROUND_BASE_URL || ""
-).replace(/\/+$/, "");
+// const baseUrl = 'https://langflow-v3-large.salmonisland-47da943e.centralindia.azurecontainerapps.io'
+const baseUrl = import.meta.env.VITE_AI_PLAYGROUND_BASE_URL;
+// https://langflow-v3-large.salmonisland-47da943e.centralindia.azurecontainerapps.io/api/v1/run/adda70b1-e24a-4610-926a-ca8b80ed8a02?stream=false
+// const flowId = '91a3d1f1-fa91-4aff-a334-140860535fae'
 
-const API_KEY = import.meta.env.VITE_AI_PLAYGROUND_API_KEY || "";
+const API_KEY = import.meta.env.VITE_AI_PLAYGROUND_API_KEY;
+
+// export const AI_PLAYGROUND_WORKFLOWS = {
+//     RAG: {flowId:'e322521c-1cd2-4126-a002-24458d3c6eaf'},
+//     INVOICING: {flowId:'1ce871a4-e87b-4e82-beb8-b4ca7791baf6', fileComponentId:'File-EKjxA'},
+//     RECONCILING : {flowId: 'f33346c4-5166-4341-83e9-3380fb00f07c',poComponent:'File-hGR2q', invoiceComponent:'File-pZRDa'}
+
+// }
 
 export const AI_PLAYGROUND_WORKFLOWS = {
-  EMBEDDING: {
-    flowId: "c7f48ee6-fab9-4119-9670-0bb145da124e",
-  },
-  AGENT: {
-    flowId: "b749c4bc-16f3-4749-a0fc-0395be267150",
-  },
+  // AGENT : {flowId:'982dce00-8135-42f0-bec1-4d898b09cf66'},
+  // EMBEDDING: { flowId: "d90bc62f-1446-45af-b057-952065d6687f" }, // OLD
+  EMBEDDING: { flowId: "c7f48ee6-fab9-4119-9670-0bb145da124e" },
+  AGENT: { flowId: "b749c4bc-16f3-4749-a0fc-0395be267150" },
 };
 
-const requireBaseUrl = () => {
-  if (!baseUrl) {
-    throw new Error(
-      "Missing VITE_AI_PLAYGROUND_BASE_URL. " +
-        "Configure it in the frontend .env file and restart Vite."
-    );
-  }
-};
-
-const getAuthHeaders = () => {
-  return API_KEY ? { "x-api-key": API_KEY } : {};
-};
+// const WORKFLOWS = {
+//     RAG: {flowId:'9e96ec5d-b3bc-4497-9006-97421cd8d7d9'},
+//     INVOICING: {flowId:'70fc313b-4f6d-4e9b-b51e-ec803d845bb1', fileComponentId:'File-zeINU'},
+//     RECONCILING: {flowId: 'adda70b1-e24a-4610-926a-ca8b80ed8a02', poComponent:'File-eclaI', invoiceComponent:'File-oqmWy'}
+// }
 
 export const uploadFileAPI = async (file) => {
   try {
-    requireBaseUrl();
-
-    if (!file || !file.name) {
-      throw new Error("No file was provided for upload.");
+    // Get the flowId based on the flag
+    const flow = AI_PLAYGROUND_WORKFLOWS["AGENT"];
+    if (!flow) {
+      throw new Error("Invalid flag provided");
     }
 
-    const flow = AI_PLAYGROUND_WORKFLOWS.AGENT;
+    const flowId = flow.flowId;
+    // console.log('uploading file to: ',flowId);
 
-    if (!flow?.flowId) {
-      throw new Error(
-        "The AI Playground AGENT workflow is not configured."
-      );
-    }
+    // dispatch({type: UPLOAD_FILE_REQUEST});
 
+    console.log("uploading file api called");
     const formData = new FormData();
     formData.append("file", file);
 
-    const fileType = file.name.split(".").pop()?.toLowerCase();
+    // Detect file type
+    const fileType = file.name.split(".").pop().toLowerCase();
+
     let fileContent = "";
 
-    // Extract file content for local history.
+    // Read file content based on type
     if (fileType === "txt") {
       fileContent = await file.text();
+      // console.log("TXT Content:", text);
     } else if (fileType === "csv") {
       const text = await file.text();
       const parsed = Papa.parse(text, { header: true });
       fileContent = JSON.stringify(parsed.data);
-    } else if (fileType === "xlsx" || fileType === "xls") {
+      // console.log("CSV Content:", parsed.data);
+    } else if (fileType === "xlsx") {
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data, { type: "array" });
       const allSheets = {};
-
       workbook.SheetNames.forEach((sheetName) => {
         allSheets[sheetName] = XLSX.utils.sheet_to_json(
           workbook.Sheets[sheetName],
           { header: 1 }
         );
+        // console.log(`XLSX Sheet "${sheetName}":`, sheet);
       });
-
       fileContent = JSON.stringify(allSheets);
     } else if (fileType === "docx" || fileType === "doc") {
       const arrayBuffer = await file.arrayBuffer();
-      const { value } = await mammoth.extractRawText({
-        arrayBuffer,
-      });
-
+      const { value } = await mammoth.extractRawText({ arrayBuffer });
       fileContent = value;
+      // console.log("DOCX/DOC Content:", value);
     } else if (fileType === "pdf") {
       const arrayBuffer = await file.arrayBuffer();
-
-      const pdf = await pdfjsLib.getDocument({
-        data: arrayBuffer,
-      }).promise;
-
-      const pages = [];
-
-      for (
-        let pageNumber = 1;
-        pageNumber <= pdf.numPages;
-        pageNumber += 1
-      ) {
-        const page = await pdf.getPage(pageNumber);
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let textContent = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
         const text = await page.getTextContent();
-
-        pages.push(
-          text.items.map((item) => item.str).join(" ")
-        );
+        textContent += text.items.map((item) => item.str).join(" ") + "\n";
       }
-
-      fileContent = pages.join("\n");
+      fileContent = textContent;
+      // console.log("PDF Content:", textContent);
     } else {
-      throw new Error(
-        `Unsupported file type: ${fileType || "unknown"}`
-      );
+      console.warn("Unsupported file type:", fileType);
     }
 
-    // Store extracted content locally.
-    const storageKey = `FILE-DIRECTORY-${file.name}`;
+    // Save file content securely
+    secureLocalStorage.setItem(`FILE-DIRECTORY-${file.name}`, fileContent);
 
-    secureLocalStorage.setItem(storageKey, fileContent);
-
-    // Update the list of stored file keys.
-    const storedKeys =
-      secureLocalStorage.getItem("FILE-DIRECTORY-KEYS");
-
-    const keys = Array.isArray(storedKeys) ? storedKeys : [];
-
-    if (!keys.includes(storageKey)) {
-      keys.push(storageKey);
-
-      secureLocalStorage.setItem(
-        "FILE-DIRECTORY-KEYS",
-        keys
-      );
+    // Update the list of stored file keys
+    let keys = secureLocalStorage.getItem("FILE-DIRECTORY-KEYS") || [];
+    if (!keys.includes(`FILE-DIRECTORY-${file.name}`)) {
+      keys.push(`FILE-DIRECTORY-${file.name}`);
+      secureLocalStorage.setItem("FILE-DIRECTORY-KEYS", keys);
     }
+    // //Logic to upload file
+    // const response = await axios.post(
+    //   `${baseUrl}/api/v1/files/upload/${flowId}`,
+    //   formData,
+    //   {
+    //     // const response = await axios.post("https://aiplayground.salmonisland-47da943e.centralindia.azurecontainerapps.io/api/v1/files/upload/1ce871a4-e87b-4e82-beb8-b4ca7791baf6", formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //       "x-api-key": `${API_KEY}`,
+    //     },
+    //     // responseType: 'json'
+    //   }
+    // );
 
-    // Upload the file to the configured AI Playground endpoint.
-    // Axios sets the multipart boundary automatically.
-    const response = await axios.post(
-      `${baseUrl}/api/v1/files/upload/${flow.flowId}`,
-      formData,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-
-    const filePath = response.data?.file_path;
-
-    if (!filePath) {
-      throw new Error(
-        "The upload endpoint did not return file_path. " +
-          "Check the API response and endpoint configuration."
-      );
-    }
-
-    // Send the uploaded file for embedding.
-    const embeddingResult = await fileIngestionAPI(filePath);
-
-    console.log("Embedding response:", embeddingResult);
-
+    const embeddingResponse = await fileIngestionAPI(response.data.file_path);
+    console.log("Embedding response: ", embeddingResponse);
     return response.data;
+
+    // console.log('file uploaded: ', response.data);
+    // dispatch({type: UPLOAD_FILE_SUCCESS, payload: response.data});
   } catch (error) {
-    console.error("File upload error:", error);
-    throw error;
+    console.log("Error:", error);
+    return error;
+    // dispatch({
+    //     type: UPLOAD_FILE_FAIL,
+    //     payload: error.response?.data?.message || error.message,
+    // });
   }
 };
 
 export const fileIngestionAPI = async (filePath) => {
   try {
-    requireBaseUrl();
-
-    const flow = AI_PLAYGROUND_WORKFLOWS.EMBEDDING;
-
-    if (!flow?.flowId) {
-      throw new Error(
-        "The AI Playground EMBEDDING workflow is not configured."
-      );
+    const flow = AI_PLAYGROUND_WORKFLOWS["EMBEDDING"];
+    if (!flow) {
+      throw new Error("Invalid flag provided");
     }
 
-    if (!filePath) {
-      throw new Error(
-        "A server-side file path is required for embedding."
-      );
-    }
+    const flowId = flow.flowId;
 
-    await axios.post(
-      `${baseUrl}/api/v1/run/${flow.flowId}?stream=false`,
+    const response = await axios.post(
+      `${baseUrl}/api/v1/run/${flowId}?stream=false`,
       {
         output_type: "text",
         input_type: "text",
@@ -199,28 +159,60 @@ export const fileIngestionAPI = async (filePath) => {
             delete_server_file_after_processing: true,
             ignore_unspecified_files: false,
             ignore_unsupported_extensions: true,
-            path: filePath,
+            path: `${filePath}`,
             silent_errors: false,
             use_multithreading: false,
           },
-
-          // Database credentials must remain on the backend.
-          // Do not add hardcoded AstraDB tokens here.
+          //   batch_size: null,
+          //   bulk_delete_concurrency: null,
+          //   bulk_insert_batch_concurrency: null,
+          //   bulk_insert_overwrite_concurrency: null,
+          //   collection_indexing_policy: "",
+          //   collection_name: "graph_rag",
+          //   keyspace: "",
+          //   metadata_incoming_links_key: "",
+          //   metadata_indexing_exclude: "",
+          //   metadata_indexing_include: "",
+          //   metric: "cosine",
+          //   number_of_results: 4,
+          //   pre_delete_collection: false,
+          //   search_filter: {},
+          //   search_query: "",
+          //   search_score_threshold: 0,
+          //   search_type: "MMR (Max Marginal Relevance) Graph Traversal",
+          //   setup_mode: "Sync",
+          //   should_cache_vector_store: true,
+          //   token:
+          //     "***REMOVED***",
+          // },
+          // "Chroma-H2OEq": {
+          //   allow_duplicates: false,
+          //   chroma_server_cors_allow_origins: "",
+          //   chroma_server_grpc_port: null,
+          //   chroma_server_host: "",
+          //   chroma_server_http_port: null,
+          //   chroma_server_ssl_enabled: false,
+          //   collection_name: "auditor-rag-session",
+          //   limit: null,
+          //   number_of_results: 10,
+          //   persist_directory: "auditor-copilot",
+          //   search_query: "",
+          //   search_type: "Similarity",
+          //   should_cache_vector_store: true,
+          // },
         },
       },
       {
         headers: {
           "Content-Type": "application/json",
-          ...getAuthHeaders(),
+          "x-api-key": `${API_KEY}`,
         },
       }
     );
 
-    return (
-      `Embedding created successfully for file: ${filePath}`
-    );
+    return `Embedding created successfully for file: ${filePath}`;
   } catch (error) {
-    console.error("File ingestion error:", error);
-    throw error;
+    console.log("Error:", error);
+    return error;
   }
 };

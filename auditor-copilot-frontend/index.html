@@ -9,15 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>AMY - Enterprise Auditor Copilot
     </title>
-    <script>
-      window.addEventListener('error', function(event) {
-        console.error("Global captured error:", event);
-        const errDiv = document.createElement('div');
-        errDiv.style = "position:fixed;top:0;left:0;width:100%;background:#ef4444;color:white;padding:16px;z-index:999999;font-family:sans-serif;white-space:pre-wrap;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);";
-        errDiv.innerHTML = "<strong>Error:</strong> " + event.message + "<br><small style='opacity:0.8;'>" + (event.filename || '') + ":" + (event.lineno || '') + "</small>";
-        document.body.prepend(errDiv);
-      });
-    </script>
   </head>
   <body>
     <div id="root"></div>
