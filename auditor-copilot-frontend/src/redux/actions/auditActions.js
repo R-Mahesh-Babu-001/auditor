@@ -114,7 +114,7 @@ export const uploadFileAPI = async (file) => {
     //   `${baseUrl}/api/v1/files/upload/${flowId}`,
     //   formData,
     //   {
-    //     // const response = await axios.post("https://aiplayground.salmonisland-47da943e.centralindia.azurecontainerapps.io/api/v1/files/upload/1ce871a4-e87b-4e82-beb8-b4ca7791baf6", formData, {
+    //     // const response = await axios.post("https://aiplayground.salmonisland-47da943e.centralindia.azurecontainerapps.io/api/v1/files/upload/1ce871a4-e87b-4e9b-b51e-ec803d845bb1", formData, {
     //     headers: {
     //       "Content-Type": "multipart/form-data",
     //       "x-api-key": `${API_KEY}`,
@@ -182,8 +182,7 @@ export const fileIngestionAPI = async (filePath) => {
           //   search_type: "MMR (Max Marginal Relevance) Graph Traversal",
           //   setup_mode: "Sync",
           //   should_cache_vector_store: true,
-          //   token:
-          //     "***REMOVED***",
+          //   token: [REMOVED — use a server-side secret, never commit the token],
           // },
           // "Chroma-H2OEq": {
           //   allow_duplicates: false,
