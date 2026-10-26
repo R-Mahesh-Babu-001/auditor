@@ -1,0 +1,2 @@
+export const SET_ACTION = 'SET_ACTION'
+export const SET_ACTION_ERROR = 'SET_ACTION_ERROR'

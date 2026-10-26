@@ -1,0 +1,1 @@
+﻿{"query":"Summarize audit risks","llm_config":{"provider":"azure_openai","model_name":"gpt-5.2-chat","temperature":0.2}}
