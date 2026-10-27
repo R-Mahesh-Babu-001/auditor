@@ -7,7 +7,7 @@ import UserInputs from "./chatInterfaceComponents/userInputs.jsx"
 import StarterSuggestions from "./chatInterfaceComponents/StarterSuggestions"
 import { useDispatch, useSelector } from "react-redux"
 import { setAction } from "../redux/actions/actionActions"
-import { starterSuggestionsArray } from "../globalConstants/useCaseConstants"
+import safeStorage from "../lib/safeStorage"
 
 /**
  * ChatInterface Component
@@ -30,10 +30,14 @@ import { starterSuggestionsArray } from "../globalConstants/useCaseConstants"
  * @param {string} props.action - Current action/use case identifier
  */
 export default function ChatInterface({setConversation, action}) {
-  // Messages state, initialized from localStorage for persistence
+  // Messages state, initialized from safeStorage for persistence
   const [messages, setMessages] = useState(() => {
-    const storedMessages = localStorage.getItem(`${action}-chatMessages`)
-    return storedMessages ? JSON.parse(storedMessages) : []
+    try {
+      const storedMessages = safeStorage.getItem(`${action}-chatMessages`)
+      return storedMessages ? JSON.parse(storedMessages) : []
+    } catch {
+      return []
+    }
   })
 
   // Redux: get action info from store
@@ -45,16 +49,12 @@ export default function ChatInterface({setConversation, action}) {
     if(actionInfo){
       // Optionally handle action info changes (e.g., update suggestions)
     }
-    localStorage.setItem(`${action}-chatMessages`, JSON.stringify(messages))
+    safeStorage.setItem(`${action}-chatMessages`, JSON.stringify(messages))
     if(action){
       dispatch(setAction(action))
     }
     setConversation(messages)
   }, [messages])
-
-  // Effect: monitor messages state (placeholder for future logic)
-  useEffect(() => {
-  }, [messages, setMessages])
 
   // Effect: listen for prompt library selections
   useEffect(() => {

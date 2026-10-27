@@ -111,7 +111,7 @@ const DynamicChart = ({ chartData }) => {
               />
               <Tooltip
                 cursor={{ strokeDasharray: '3 3' }}
-                formatter={(value, name, props) => {
+                formatter={(value, name) => {
                   if (name === xKey) return [`$${value}`, "Price"];
                   if (name === yKey) return [value, "Rating"];
                   return value;

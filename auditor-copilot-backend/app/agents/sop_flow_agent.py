@@ -1,6 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from app.llm.azure_openai import get_fixed_llm
+from app.llm.gemini import get_fixed_llm
 
 system_message = """
 You are an AI that converts SOP documents into flowcharts in ReactFlow format.

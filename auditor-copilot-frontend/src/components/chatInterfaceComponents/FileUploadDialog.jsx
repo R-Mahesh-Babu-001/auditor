@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -9,7 +9,6 @@ import {
 } from "../../../components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { uploadFileAPI } from "../../redux/actions/auditActions";
 
 // import { useDispatch } from "react-redux";
 

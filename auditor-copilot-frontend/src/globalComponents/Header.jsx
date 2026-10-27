@@ -2,8 +2,6 @@
 // Header.jsx
 // Application header with logo, navigation, and (optional) action buttons.
 import React from 'react'
-import { Button } from "@/components/ui/button";
-import { cn } from "../lib/utils";
 
 
 

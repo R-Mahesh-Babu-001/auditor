@@ -1,43 +1,38 @@
-
-"""
-Configuration module for environment variables and settings.
-Uses Pydantic BaseSettings for type-safe config management.
-"""
+"""Application settings for Gemini and Neon PostgreSQL."""
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
-    """
-    Application settings loaded from environment variables or .env file.
-    """
-    # Azure OpenAI API configuration
-    AZURE_OPENAI_4o_MINI_API_KEY: str
-    AZURE_OPENAI_4o_MINI_ENDPOINT: str
-    AZURE_OPENAI_4o_MINI_DEPLOYMENT: str
-    AZURE_OPENAI_4o_MINI_API_VERSION: str
+    # Neon PostgreSQL Database & pgvector
+    DATABASE_URL: str = ""
+    VECTOR_STORE_BACKEND: str = "neon_pgvector"
+    NEON_DB_COLLECTION: str = "audit_docs"
 
-    AZURE_OPENAI_EMBEDDING_ENDPOINT: str
-    AZURE_OPENAI_EMBEDDING_API_KEY: str
-    AZURE_OPENAI_EMBEDDING_DEPLOYMENT: str
-    AZURE_OPENAI_EMBEDDING_API_VERSION: str
+    # Google Cloud Vertex AI / Gemini (The only authorized LLM provider)
+    GOOGLE_CLOUD_PROJECT: str = ""
+    GOOGLE_CLOUD_LOCATION: str = "global"
+    GOOGLE_GENAI_USE_VERTEXAI: bool = False
+    GOOGLE_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-001"
+    GEMINI_EMBEDDING_DIMENSIONS: int = 768
 
-    # AWS Bedrock configuration
-    AWS_REGION: str = ""
-    AWS_ACCESS_KEY_ID: str = ""
-    AWS_SECRET_ACCESS_KEY: str = ""
-
-    # ChromaDB vector store configuration
-    CHROMA_DB_COLLECTION: str = "audit_docs"
-    CHROMA_DB_DIR: str = "chroma_db"
-    # Toggle usage of Chroma backend. Set to True only if chromadb native bindings are
-    # correctly installed and compatible with the host environment. Default: False (use FAISS/Dummy fallback).
-    CHROMA_ENABLED: bool = False
-
-    # Pydantic settings config
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        extra="ignore"
+    # Frontend CORS configuration
+    CORS_ORIGINS: str = (
+        "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
     )
 
-# Singleton settings instance
+    # File uploads
+    UPLOAD_DIR: str = "storage/evidence_uploads"
+    MAX_FILE_SIZE_MB: int = 50
+
+    model_config = SettingsConfigDict(
+        env_file=(".env", "auditor-copilot-backend/.env"),
+        extra="ignore",
+        case_sensitive=True,
+    )
+
+
 settings = Settings()

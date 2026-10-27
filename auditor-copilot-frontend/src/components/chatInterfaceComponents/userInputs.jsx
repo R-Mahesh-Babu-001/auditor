@@ -2,10 +2,11 @@ import { cn } from "../../lib/utils"
 import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Send, Paperclip, XCircle, Loader2 } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../srccomponents/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import FileUploadDialog from "./FileUploadDialog";
+import safeStorage from "../../lib/safeStorage";
 
-const UserInputs = ({showSuggestions, promptInputValue, message: messages, setMessages, action }) => {
+const UserInputs = ({ promptInputValue, setMessages, action }) => {
   const [inputValue, setInputValue] = useState(promptInputValue || "")
   const [files, setFiles] = useState([])
   const [isStreaming, setIsStreaming] = useState(false)
@@ -13,18 +14,14 @@ const UserInputs = ({showSuggestions, promptInputValue, message: messages, setMe
   
   const [complianceMode, setComplianceMode] = useState("IT");
 
-  const model = localStorage.getItem("model") || "gpt-5.2-chat";
-  const provider = localStorage.getItem("provider") || "azure openai";
+  const model = safeStorage.getItem("model") || "gemini-2.5-flash";
+  const provider = safeStorage.getItem("provider") || "Google Gemini";
 
   // Ensure a persistent user id for memory scoping
   const getUserId = () => {
     // Default fixed id for now (will be extended later)
     const fixedId = "demo_user"
-    try {
-      localStorage.setItem("auditor_user_id", fixedId)
-    } catch (e) {
-      // ignore storage errors
-    }
+    safeStorage.setItem("auditor_user_id", fixedId)
     return fixedId
   }
 
@@ -228,18 +225,6 @@ const UserInputs = ({showSuggestions, promptInputValue, message: messages, setMe
 
     if (!resp.ok) {
       console.warn("File ingest failed", await resp.text())
-    }
-  }
-
-
-  const handleFileChange = (e) => {
-    if (isStreaming || isWaitingForStream) return
-    
-    const selectedFiles = Array.from(e.target.files)
-    if (files.length + selectedFiles.length <= 10) {
-      setFiles((prev) => [...prev, ...selectedFiles])
-    } else {
-      alert("You can upload a maximum of 10 files.")
     }
   }
 

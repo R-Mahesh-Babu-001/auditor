@@ -1,29 +1,43 @@
-
 """
 Main entry point for the FastAPI backend service.
 Initializes the FastAPI app, configures CORS, and includes all API routers.
+Enterprise-grade AuditReady Copilot powered by Google Gemini and Neon PostgreSQL.
 """
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Import routers for different API endpoints
+# Existing legacy routers (kept compatible)
 from app.routers import chat, analysis, documents, sop_flow, health
-from app.routers import compliance
-from app.routers import corporate
-from app.routers import memory
+from app.routers import compliance, corporate, memory
+
+# Enterprise Audit Copilot routers
+from app.routers import auth
+from app.routers import engagements
+from app.routers import evidence
+from app.routers import datasets
+from app.routers import rcm
+from app.routers import tests
+from app.routers import exceptions
+from app.routers import findings
+from app.routers import workpapers
+from app.routers import remediation
+from app.routers import dashboard
+from app.routers import continuous
+from app.routers import governance
+
 from app.config import settings
 
 # Create FastAPI app instance
 app = FastAPI(
-    title="Auditor Copilot Backend",
-    version="0.1.0"
+    title="AuditReady Copilot Backend",
+    description="Evidence-first AI Audit Platform powered by Google Gemini and Neon PostgreSQL",
+    version="2.0.0",
 )
 
 # -----------------------------
 # CORS Middleware
 # -----------------------------
-# Allow cross-origin requests from frontend origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS.split(",")
@@ -38,10 +52,30 @@ app.add_middleware(
 )
 
 # -----------------------------
-# Routers
+# System & Diagnostic Routers
 # -----------------------------
-# Register API routers for different functionalities
 app.include_router(health.router)
+
+# -----------------------------
+# Core Audit Copilot API Routers
+# -----------------------------
+app.include_router(auth.router, prefix="/api")
+app.include_router(engagements.router, prefix="/api")
+app.include_router(evidence.router, prefix="/api")
+app.include_router(datasets.router, prefix="/api")
+app.include_router(rcm.router, prefix="/api")
+app.include_router(tests.router, prefix="/api")
+app.include_router(exceptions.router, prefix="/api")
+app.include_router(findings.router, prefix="/api")
+app.include_router(workpapers.router, prefix="/api")
+app.include_router(remediation.router, prefix="/api")
+app.include_router(dashboard.router, prefix="/api")
+app.include_router(continuous.router, prefix="/api")
+app.include_router(governance.router, prefix="/api")
+
+# -----------------------------
+# Conversational & Legacy Endpoints
+# -----------------------------
 app.include_router(chat.router, prefix="/api")
 app.include_router(analysis.router, prefix="/api")
 app.include_router(documents.router, prefix="/api")

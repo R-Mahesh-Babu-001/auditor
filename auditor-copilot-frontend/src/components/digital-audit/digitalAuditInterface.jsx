@@ -1,7 +1,7 @@
 
 // DigitalAuditInterface.jsx
 // Step-by-step UI for digital audit tasks on social media accounts/content.
-import react, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";

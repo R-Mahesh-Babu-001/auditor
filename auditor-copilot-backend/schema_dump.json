@@ -1,0 +1,3774 @@
+{
+  "agent_run_sources": [
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "agent_run_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "evidence_file_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "fragment_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_purpose",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'retrieved_context'::character varying"
+    },
+    {
+      "name": "rank_position",
+      "type": "integer",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "relevance_score",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "agent_runs": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "conversation_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "requested_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "agent_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'running'::character varying"
+    },
+    {
+      "name": "model_provider",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "model_name",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "prompt_version",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "input_sha256",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "output_sha256",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "started_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "completed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "latency_ms",
+      "type": "bigint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "input_tokens",
+      "type": "integer",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "output_tokens",
+      "type": "integer",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "error_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "error_summary",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    }
+  ],
+  "app_users": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "email",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "full_name",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "password_hash",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "auth_provider",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'local'::character varying"
+    },
+    {
+      "name": "external_subject",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'active'::character varying"
+    },
+    {
+      "name": "last_login_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_controls": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "control_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "control_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "execution_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'manual'::character varying"
+    },
+    {
+      "name": "frequency",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "control_owner_user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "design_assessment",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'not_assessed'::character varying"
+    },
+    {
+      "name": "operating_assessment",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'not_tested'::character varying"
+    },
+    {
+      "name": "evidence_requirements",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'proposed'::character varying"
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_criteria": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "criterion_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "requirement_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'policy'::character varying"
+    },
+    {
+      "name": "requirement_text",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "effective_from",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "effective_to",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "version_number",
+      "type": "integer",
+      "nullable": false,
+      "default": "1"
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'draft'::character varying"
+    },
+    {
+      "name": "approved_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approved_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_datasets": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "dataset_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_name",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "version_number",
+      "type": "integer",
+      "nullable": false,
+      "default": "1"
+    },
+    {
+      "name": "schema_definition",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "row_count",
+      "type": "bigint",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "valid_row_count",
+      "type": "bigint",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "invalid_row_count",
+      "type": "bigint",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'uploaded'::character varying"
+    },
+    {
+      "name": "approved_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approved_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_engagements": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "name",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "audit_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'internal'::character varying"
+    },
+    {
+      "name": "business_unit",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "objective",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "scope_description",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "period_start",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "period_end",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'planning'::character varying"
+    },
+    {
+      "name": "overall_risk",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "lead_user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_event_log": [
+    {
+      "name": "id",
+      "type": "bigint",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "actor_user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "event_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "entity_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "entity_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "request_id",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_ip",
+      "type": "inet",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "user_agent",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "before_state",
+      "type": "jsonb",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "after_state",
+      "type": "jsonb",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "event_metadata",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_exceptions": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "test_run_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "exception_key",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "exception_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "severity",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'medium'::character varying"
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'new'::character varying"
+    },
+    {
+      "name": "expected_values",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "observed_values",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "rationale",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "resolution_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "resolution_notes",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "assigned_to",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reviewed_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reviewed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "closed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_findings": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "finding_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "finding_type",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "severity",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'medium'::character varying"
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'draft'::character varying"
+    },
+    {
+      "name": "criterion_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "risk_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "control_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "condition_text",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "criteria_text",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "cause_text",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "consequence_text",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "recommendation_text",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "management_response",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "finding_owner_user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "validated_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "validated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_risks": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "risk_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "category",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "inherent_likelihood",
+      "type": "smallint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "inherent_impact",
+      "type": "smallint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "residual_likelihood",
+      "type": "smallint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "residual_impact",
+      "type": "smallint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "risk_owner_user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'identified'::character varying"
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_test_rule_templates": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "rule_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "name",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "category",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "implementation_key",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "default_parameters",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "required_dataset_types",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "nullable": false,
+      "default": "true"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_test_rules": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "template_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "rule_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "name",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "version_number",
+      "type": "integer",
+      "nullable": false,
+      "default": "1"
+    },
+    {
+      "name": "parameters",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'draft'::character varying"
+    },
+    {
+      "name": "approved_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approved_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "audit_test_runs": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "rule_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "rule_version",
+      "type": "integer",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "execution_status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'queued'::character varying"
+    },
+    {
+      "name": "requested_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "started_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "completed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "population_count",
+      "type": "bigint",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "passed_count",
+      "type": "bigint",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "exception_count",
+      "type": "bigint",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "skipped_count",
+      "type": "bigint",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "parameters_snapshot",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "input_snapshot",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "result_summary",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "code_version",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "error_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "error_summary",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "chat_conversations": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "agent_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'chat'::character varying"
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'active'::character varying"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "chat_messages": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "conversation_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "sequence_number",
+      "type": "bigint",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "role",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "content_text",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "token_count",
+      "type": "integer",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "criteria_control_mappings": [
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "criterion_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "control_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "mapping_status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'proposed'::character varying"
+    },
+    {
+      "name": "mapping_rationale",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reviewed_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reviewed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "dataset_columns": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_column_name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "canonical_field",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_data_type",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "target_data_type",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "mapping_status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'unmapped'::character varying"
+    },
+    {
+      "name": "mapping_confidence",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "transformation",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "dataset_rows": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "row_number",
+      "type": "bigint",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "raw_data",
+      "type": "jsonb",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "normalized_data",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "row_sha256",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "validation_status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'pending'::character varying"
+    },
+    {
+      "name": "validation_errors",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "engagement_memberships": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_role",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "evidence_files": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "uploaded_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "original_filename",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "storage_object_key",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "mime_type",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "file_extension",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "file_size_bytes",
+      "type": "bigint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "sha256_hex",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "evidence_category",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'general'::character varying"
+    },
+    {
+      "name": "source_system",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_period_start",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_period_end",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "confidentiality",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'confidential'::character varying"
+    },
+    {
+      "name": "processing_status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'uploaded'::character varying"
+    },
+    {
+      "name": "processing_error",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "retention_until",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "uploaded_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "evidence_fragments": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "evidence_file_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "fragment_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'text'::character varying"
+    },
+    {
+      "name": "fragment_index",
+      "type": "integer",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "text_content",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "page_number",
+      "type": "integer",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "section_heading",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "sheet_name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "row_start",
+      "type": "bigint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "row_end",
+      "type": "bigint",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "content_sha256",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "vector_store",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "vector_ref",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "evidence_processing_jobs": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "evidence_file_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "job_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'queued'::character varying"
+    },
+    {
+      "name": "attempts",
+      "type": "integer",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "started_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "completed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "error_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "error_summary",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "metrics",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "exception_evidence_links": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "exception_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "evidence_file_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "fragment_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "link_role",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'supporting_evidence'::character varying"
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "explanation",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "exception_row_links": [
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "exception_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_row_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "link_role",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'affected_record'::character varying"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "finding_exceptions": [
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "finding_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "exception_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "organization_memberships": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "role",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'active'::character varying"
+    },
+    {
+      "name": "invited_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "joined_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "organizations": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "name",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "slug",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'active'::character varying"
+    },
+    {
+      "name": "settings",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_approval_events": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "purchase_order_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "invoice_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "payment_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "supplier_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "event_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "decision",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approver_user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approver_external_id",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approver_name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approval_reference",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "event_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "attributes",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_goods_receipt_lines": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "goods_receipt_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "purchase_order_line_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "line_number",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "item_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "received_quantity",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "unit_of_measure",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_goods_receipts": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_dataset_row_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "receipt_number",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "purchase_order_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "supplier_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "receipt_date",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'unknown'::character varying"
+    },
+    {
+      "name": "attributes",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_invoice_lines": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "invoice_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "purchase_order_line_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "line_number",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "item_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "invoiced_quantity",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "unit_of_measure",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "unit_price",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "line_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "tax_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_invoices": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_dataset_row_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "supplier_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "purchase_order_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "invoice_number",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "normalized_invoice_number",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "invoice_date",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "due_date",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "currency_code",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "subtotal_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "tax_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "total_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'unknown'::character varying"
+    },
+    {
+      "name": "attributes",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_payment_allocations": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "payment_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "invoice_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "allocated_amount",
+      "type": "numeric",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_payments": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_dataset_row_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "supplier_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "payment_reference",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "payment_date",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "currency_code",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "amount",
+      "type": "numeric",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "payment_method",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'unknown'::character varying"
+    },
+    {
+      "name": "attributes",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_purchase_order_lines": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "purchase_order_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "line_number",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "item_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "ordered_quantity",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "unit_of_measure",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "unit_price",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "line_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "tax_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_purchase_orders": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_dataset_row_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "supplier_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "po_number",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "order_date",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "currency_code",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'unknown'::character varying"
+    },
+    {
+      "name": "total_amount",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "attributes",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "p2p_suppliers": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source_dataset_row_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "supplier_code",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "supplier_name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "tax_identifier",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'unknown'::character varying"
+    },
+    {
+      "name": "attributes",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "remediation_actions": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "finding_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "action_title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "action_description",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "owner_user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "due_date",
+      "type": "date",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'open'::character varying"
+    },
+    {
+      "name": "management_comment",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "submitted_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "verified_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "verified_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "remediation_evidence_links": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "remediation_action_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "evidence_file_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "evidence_note",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "submitted_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "submitted_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "risk_control_mappings": [
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "risk_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "control_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "mapping_rationale",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "sop_process_maps": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_evidence_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "version_number",
+      "type": "integer",
+      "nullable": false,
+      "default": "1"
+    },
+    {
+      "name": "diagram_json",
+      "type": "jsonb",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'draft'::character varying"
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reviewed_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reviewed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "test_run_datasets": [
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "test_run_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "dataset_version",
+      "type": "integer",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "workpaper_evidence_links": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "workpaper_version_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "evidence_file_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "fragment_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "claim_or_section",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source_locator",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "workpaper_exception_links": [
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "workpaper_version_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "exception_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "workpaper_versions": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "workpaper_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "version_number",
+      "type": "integer",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "content_markdown",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "structured_content",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "conclusion_status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'preliminary'::character varying"
+    },
+    {
+      "name": "generation_method",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'manual'::character varying"
+    },
+    {
+      "name": "model_provider",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "model_name",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "prompt_version",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "input_snapshot_hash",
+      "type": "character",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "review_status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'not_reviewed'::character varying"
+    },
+    {
+      "name": "reviewed_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reviewed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "review_comment",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    }
+  ],
+  "workpapers": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "organization_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "engagement_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "workpaper_code",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "workpaper_type",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'test_results'::character varying"
+    },
+    {
+      "name": "objective",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "methodology",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "population_description",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "sampling_method",
+      "type": "character varying",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "character varying",
+      "nullable": false,
+      "default": "'draft'::character varying"
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approved_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "approved_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ]
+}

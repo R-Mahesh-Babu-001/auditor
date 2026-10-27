@@ -35,10 +35,10 @@ const nodeTypes = {
  */
 const SopFlowChartShowcaseScreen = ({ flow_data }) => {
     // State for flowchart data
-    const [data, setData] = useState(flow_data);
+    const [data] = useState(flow_data);
     // ReactFlow state hooks for nodes and edges
-    const [nodes, setNodes, onNodesChange] = useNodesState(data.nodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(data.edges);
+    const [nodes,, onNodesChange] = useNodesState(data.nodes);
+    const [edges,, onEdgesChange] = useEdgesState(data.edges);
 
     return (
         <div
@@ -61,7 +61,7 @@ const SopFlowChartShowcaseScreen = ({ flow_data }) => {
                 style={{ background: "#f0f0f0" }}
                 className="w-full h-full overflow-hidden"
             >
-                <MiniMap nodeColor={(node) => "#8b5cf6"} />
+                <MiniMap nodeColor={() => "#8b5cf6"} />
                 <Controls />
                 <Background color="#aaa" gap={16} />
             </ReactFlow>

@@ -2,7 +2,8 @@ from langchain_community.document_loaders import (
     PyPDFLoader,
     CSVLoader,
     UnstructuredWordDocumentLoader,
-    UnstructuredExcelLoader
+    UnstructuredExcelLoader,
+    TextLoader
 )
 import tempfile
 import os
@@ -23,16 +24,19 @@ def load_document(file_bytes: bytes, filename: str):
             loader = UnstructuredExcelLoader(tmp_path)
         elif suffix == "csv":
             loader = CSVLoader(tmp_path)
+        elif suffix == "txt":
+            loader = TextLoader(tmp_path, encoding="utf-8")
         else:
             raise ValueError("Unsupported file type")
 
         return loader.load()
 
     finally:
-        os.remove(tmp_path)
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
 
 """
-Utility for loading and parsing document files (PDF, Word, Excel, CSV) into text chunks.
+Utility for loading and parsing document files (PDF, Word, Excel, CSV, TXT) into text chunks.
 """
 
 # load_document saves the uploaded file to a temp file, loads it with the appropriate loader, and returns parsed content.

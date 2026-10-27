@@ -12,7 +12,6 @@ const downloadConversation = async (messages) => {
     // Embed fonts
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-    const fontItalic = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
     const fontSize = 12;
     const lineHeight = 18;
     
@@ -126,12 +125,10 @@ const downloadConversation = async (messages) => {
         
         // Process each formatted segment
         for (const segment of formattedSegments) {
-          const segmentFont = segment.isBold ? fontBold : fontType;
           const words = segment.text.split(' ');
           
           for (let i = 0; i < words.length; i++) {
             const word = words[i] + (i < words.length - 1 ? ' ' : '');
-            const wordWidth = segmentFont.widthOfTextAtSize(word, fontSize);
             const testLineWidth = fontType.widthOfTextAtSize(currentLine + word, fontSize);
             
             if (testLineWidth > maxWidth && currentLine !== '') {

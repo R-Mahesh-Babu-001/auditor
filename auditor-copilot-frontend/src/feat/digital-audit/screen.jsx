@@ -35,7 +35,8 @@ const DigitalAuditScreen = () => {
 
     try {
       // Call backend agent API
-      const response = await fetch(`${process.env.VITE_API_URL}/run`, {
+      const apiUrl = import.meta.env?.VITE_API_URL || "http://localhost:8000";
+      const response = await fetch(`${apiUrl}/api/compliance/run`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

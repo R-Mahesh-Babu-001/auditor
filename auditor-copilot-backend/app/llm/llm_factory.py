@@ -1,12 +1,17 @@
-from app.llm.azure_openai import get_azure_llm
-from app.llm.aws_bedrock import get_bedrock_llm
+"""
+Factory module for LLM creation.
+Enforces Google Gemini as the single, exclusive LLM provider.
+"""
 
-def get_llm(llm_config, streaming: bool = False):
-    if llm_config.provider == "azure_openai":
-        return get_azure_llm(llm_config, streaming)
-    elif llm_config.provider == "aws_bedrock":
-        return get_bedrock_llm(llm_config, streaming)
-    else:
-        raise ValueError("Unsupported provider")
+from app.llm.gemini import get_gemini_llm, get_fixed_llm
 
-# get_llm returns the appropriate LLM instance based on the provider in llm_config.
+
+def get_llm(llm_config=None, streaming: bool = False):
+    """Return the configured Gemini LLM instance.
+
+    Google Gemini is the only LLM provider. Any legacy provider name is safely mapped to Gemini.
+    """
+    return get_gemini_llm(model_config=llm_config, streaming=streaming)
+
+
+__all__ = ["get_llm", "get_fixed_llm"]

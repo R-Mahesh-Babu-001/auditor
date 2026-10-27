@@ -2,12 +2,11 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import mammoth from "mammoth";
-import * as PDFJS from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
+import * as pdfjsLib from "pdfjs-dist";
+import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
 import secureLocalStorage from "react-secure-storage";
 
 // Set PDF worker
-// Tell pdf.js where to find the worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 // const baseUrl = 'https://langflow-v3-large.salmonisland-47da943e.centralindia.azurecontainerapps.io'
@@ -39,16 +38,10 @@ export const AI_PLAYGROUND_WORKFLOWS = {
 
 export const uploadFileAPI = async (file) => {
   try {
-    // Get the flowId based on the flag
     const flow = AI_PLAYGROUND_WORKFLOWS["AGENT"];
     if (!flow) {
       throw new Error("Invalid flag provided");
     }
-
-    const flowId = flow.flowId;
-    // console.log('uploading file to: ',flowId);
-
-    // dispatch({type: UPLOAD_FILE_REQUEST});
 
     console.log("uploading file api called");
     const formData = new FormData();
@@ -123,12 +116,7 @@ export const uploadFileAPI = async (file) => {
     //   }
     // );
 
-    const embeddingResponse = await fileIngestionAPI(response.data.file_path);
-    console.log("Embedding response: ", embeddingResponse);
-    return response.data;
-
-    // console.log('file uploaded: ', response.data);
-    // dispatch({type: UPLOAD_FILE_SUCCESS, payload: response.data});
+    return { success: true, fileName: file.name, size: file.size };
   } catch (error) {
     console.log("Error:", error);
     return error;
@@ -148,7 +136,7 @@ export const fileIngestionAPI = async (filePath) => {
 
     const flowId = flow.flowId;
 
-    const response = await axios.post(
+    await axios.post(
       `${baseUrl}/api/v1/run/${flowId}?stream=false`,
       {
         output_type: "text",

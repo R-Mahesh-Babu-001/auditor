@@ -1,8 +1,8 @@
 // src/hooks/useFileExtractor.ts
 import { useState, useCallback } from "react";
 import * as XLSX from "xlsx";
-import * as pdfjsLib from "pdfjs-dist/build/pdf";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker?url";
+import * as pdfjsLib from "pdfjs-dist";
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
 import { createWorker } from "tesseract.js";
 import mammoth from "mammoth";
 

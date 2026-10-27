@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import UserInputs from "./userInputs";
 import { starterSuggestionsArray } from "../../globalConstants/useCaseConstants";
 
-const StarterSuggestions = ({ suggestionObjectId, messages, setMessages }) => {
+const StarterSuggestions = ({ suggestionObjectId, setMessages }) => {
     const [inputValue, setInputValue] = useState("")
     const [suggestionsObject, setSuggestionsObject] = useState([])
 

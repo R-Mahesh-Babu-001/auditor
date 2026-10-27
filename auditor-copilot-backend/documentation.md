@@ -1,85 +1,74 @@
 # Backend Service Documentation
 
 ## Overview
-This backend service is built with FastAPI and serves as the core API for the Auditor Copilot application. It provides endpoints for document analysis, chat, SOP flow, and more, leveraging LLMs and various agents.
+This backend service is built with FastAPI and serves as the core API for the Auditor Copilot application. It provides endpoints for document analysis, chat, SOP flow, and more, leveraging LLMs, Neon PostgreSQL with pgvector, and various audit agents.
 
 ## Project Structure
 ```
-backend-fastapi/
+auditor-copilot-backend/
 ├── Dockerfile
 ├── requirements.txt
-├── .env.example
+├── .env
 ├── app/
-│   ├── config.py
-│   ├── main.py
-│   ├── schemas.py
-│   ├── agents/
-│   ├── llm/
-│   ├── routers/
-│   └── utils/
-├── backend_env/ (Python virtual environment)
-├── chroma_db/ (Vector DB)
+│   ├── config.py       # Configuration and Neon DB / LLM settings
+│   ├── main.py         # FastAPI application entrypoint
+│   ├── schemas.py      # Pydantic request/response schemas
+│   ├── agents/         # Agents (Analysis, Chat, Compliance, Corporate, Document, SOP Flow)
+│   ├── llm/            # LLM integrations (Gemini, Azure OpenAI, AWS Bedrock)
+│   ├── routers/        # API route definitions
+│   └── utils/          # Utilities (Neon pgvector store, memory, PDF loader, streaming)
+└── tests/              # Smoke and unit tests
 ```
+
+## Database
+- **Neon PostgreSQL (`pgvector`)**: Cloud serverless PostgreSQL database with the `pgvector` extension for storing and querying vector embeddings and document chunks.
+- Supports agent-scoped, user-scoped, and mode-scoped namespaces (`DOCUMENT_ANALYSIS`, `CHAT_MEMORY_<user_id>`, `COMPLIANCE_MEMORY_<user_id>_<mode>`, etc.).
+- Robust embedding pipeline supporting Google Gemini / GenAI, Azure OpenAI, standard OpenAI, and deterministic fallback embeddings.
 
 ## Key Directories & Files
 - **app/main.py**: FastAPI app entry point.
-- **app/config.py**: Configuration and environment variables.
+- **app/config.py**: Configuration and environment variables (Neon PostgreSQL, Gemini, Azure, Bedrock).
 - **app/agents/**: Agent logic for analysis, chat, documents, compliance, corporate, and SOP flow.
-- **app/llm/**: LLM integration (AWS Bedrock, Azure OpenAI, etc.).
-- **app/routers/**: API route definitions (chat, analysis, documents, compliance, corporate, etc.).
-- **app/utils/**: Utility functions (PDF loader, search, streaming, vector store, etc.).
+- **app/llm/**: LLM integration (Gemini, AWS Bedrock, Azure OpenAI, etc.).
+- **app/routers/**: API route definitions (chat, analysis, documents, compliance, corporate, memory, health).
+- **app/utils/vector_store.py**: Neon DB vector store (pgvector) utilities for document embedding, retrieval, and ingestion.
 - **requirements.txt**: Python dependencies.
 - **Dockerfile**: Containerization setup.
-- **.env.example**: Example environment variables.
 
 ## Setup Instructions
-1. **Clone the repository** and navigate to `backend-fastapi/`.
+1. **Navigate to `auditor-copilot-backend/`**.
 2. **Create a virtual environment** (optional, recommended):
    ```sh
-   python -m venv backend_env
-   source backend_env/Scripts/activate  # On Windows
+   python -m venv .venv
+   source .venv/bin/activate      # On Unix
    # or
-   source backend_env/bin/activate      # On Unix
+   .venv\Scripts\activate       # On Windows
    ```
 3. **Install dependencies:**
    ```sh
    pip install -r requirements.txt
    ```
-4. **Configure environment variables:**
-   - Copy `.env.example` to `.env` and update values as needed.
+4. **Configure environment variables in `.env`:**
+   ```env
+   DATABASE_URL=postgresql://<user>:<password>@<neon-host>/<dbname>?sslmode=require
+   VECTOR_STORE_BACKEND=neon_pgvector
+   GEMINI_MODEL=gemini-3.5-flash
+   GEMINI_EMBEDDING_MODEL=gemini-embedding-001
+   ```
 5. **Run the FastAPI server:**
    ```sh
    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
-## Docker Usage
-To build and run the backend with Docker:
-```sh
-# Build the image
- docker build -t auditor-backend .
-# Run the container
- docker run -d -p 8000:8000 --env-file .env auditor-backend
-```
-
 ## API Endpoints
-- `/api/chat` - Chat interface with streaming and ingestion support.
-- `/api/analysis` - Document analysis and scenario-based streaming.
-- `/api/documents` - Knowledge-base driven document Q&A (RAG).
-- `/api/compliance` - Mode-based compliance audit workflows (IT/Finance).
-- `/api/corporate` - Corporate accounting guidelines and justification notes analysis.
-- `/api/sop_flow` - SOP flow flowchart generation.
-- `/api/memory` - Conversation memory management.
-- `/health` - Health check.
-
-## Notes
-- The backend uses a vector database (ChromaDB) for document embeddings.
-- LLM providers are configurable via environment variables.
-- For development, use the `--reload` flag with Uvicorn for auto-reload.
-
-## Contributing
-- Follow PEP8 style guidelines.
-- Add docstrings and type hints where possible.
-- Use pull requests for all changes.
-
-## License
-See repository root for license information.
+- `/api/chat/stream` - Streaming chat with conversation memory in Neon DB.
+- `/api/chat/ingest` - File ingestion into user chat memory in Neon DB.
+- `/api/analysis/stream` - Audit scenario analysis and streaming.
+- `/api/analysis/ingest` - File ingestion into user analysis memory in Neon DB.
+- `/api/documents/query/stream` - Knowledge-base driven document Q&A (RAG) using Neon DB pgvector.
+- `/api/documents/ingest` - Document ingestion into `DOCUMENT_ANALYSIS` collection in Neon DB.
+- `/api/compliance/stream` & `/api/compliance/run` - Mode-based compliance audit workflows (IT/Finance).
+- `/api/corporate/stream` & `/api/corporate/ingest` - Corporate accounting guidelines & justification notes.
+- `/api/sop/flowchart` - SOP flow flowchart generation.
+- `/api/memory/clear` - Clear vector memory from Neon DB for a specific namespace.
+- `/health` - Health check including Neon DB connectivity status.

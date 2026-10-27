@@ -19,30 +19,18 @@ const exampleFlowcharts = [
   { label: "Employee Time-Off Request", data: dummy3 },
 ];
 
-const generationMessages = [
-  "Analyzing the file...",
-  "Understanding the process flow...",
-  "Generating the flowchart..."
-];
-
-
-
 /**
  * SopFlowChartScreen Component
  * UI for uploading a file, extracting SOP data, and generating a flowchart.
  * Also allows previewing example flowcharts.
  */
-const SopFlowChartScreen = ({ setConversation, action }) => {
+const SopFlowChartScreen = () => {
   // File selected by the user
   const [selectedFile, setSelectedFile] = useState(null);
-  // Loading state for async operations
-  const [loading, setLoading] = useState(false);
   // Error message state
   const [error, setError] = useState("");
   // Flowchart data for rendering
   const [data, setData] = useState(null);
-  // Cancel token for async operations (not used)
-  const [cancelToken, setCancelToken] = useState(null);
   // Currently active example label
   const [activeExample, setActiveExample] = useState(null);
   // Loading message for progress feedback

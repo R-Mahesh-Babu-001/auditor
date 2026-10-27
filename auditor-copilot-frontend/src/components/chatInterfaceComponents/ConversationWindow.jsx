@@ -36,7 +36,7 @@ import {
   Cell,
 } from "recharts";
 
-const ConversationWindow = ({ messages, setMessages }) => {
+const ConversationWindow = ({ messages }) => {
   const messagesEndRef = useRef(null)
 
   console.log("Messages: ", messages)
@@ -247,7 +247,7 @@ const ConversationWindow = ({ messages, setMessages }) => {
                           </div>
                         );
                       }
-                    } catch (e) {
+                    } catch {
                       // not JSON or not a chart, fall through to markdown
                     }
 
@@ -263,7 +263,7 @@ const ConversationWindow = ({ messages, setMessages }) => {
                             ),
 
                             // Code blocks
-                            code: ({ inline, className, children }) => {
+                            code: ({ inline, children }) => {
                               if (inline) {
                                 return (
                                   <code className={cn(

@@ -1,4 +1,4 @@
-ALLOWED_EXTENSIONS = {"pdf", "docx", "doc", "xlsx", "xls", "csv"}
+ALLOWED_EXTENSIONS = {"pdf", "docx", "doc", "xlsx", "xls", "csv", "txt"}
 
 def validate_file(filename: str):
     ext = filename.split(".")[-1].lower()
@@ -8,7 +8,5 @@ def validate_file(filename: str):
 """
 File validation utility for allowed document types.
 """
-
-ALLOWED_EXTENSIONS = {"pdf", "docx", "doc", "xlsx", "xls", "csv"}
 
 # validate_file checks if the file extension is allowed, raises ValueError if not.

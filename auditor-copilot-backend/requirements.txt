@@ -86,3 +86,15 @@ webencodings==0.5.1
 wrapt==2.0.1
 xxhash==3.6.0
 zstandard==0.25.0
+
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+pydantic-settings>=2.2.0
+langchain-community>=0.0.30
+langchain-postgres>=0.0.12
+pgvector>=0.3.0
+psycopg[binary]>=3.1.18
+psycopg2-binary>=2.9.9
+asyncpg>=0.29.0
+langchain-google-genai>=2.0.0
+google-genai>=1.0.0
