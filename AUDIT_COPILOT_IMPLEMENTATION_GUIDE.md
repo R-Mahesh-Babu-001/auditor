@@ -43,11 +43,12 @@ Neon utilizes serverless PgBouncer connection poolers (`ep-*-pooler.*.aws.neon.t
 - **Solution**: Every SQLAlchemy ORM model explicitly specifies `__table_args__ = {"schema": "audit_copilot"}`. This generates fully-qualified SQL queries (e.g. `SELECT ... FROM audit_copilot.audit_exceptions`) that work seamlessly across both direct connections and PgBouncer poolers.
 - **Connection Recycling**: Database engine is configured with `pool_pre_ping=True` and `pool_recycle=300` to automatically recover from idle serverless scale-to-zero wakeups.
 
-### 3.3 Vector Embeddings with Neon PGVector
-ChromaDB has been completely purged from the repository. Vector indexing is handled natively in Neon PostgreSQL using `langchain_postgres.vectorstores.PGVector`:
-- Connection utilizes the existing `DATABASE_URL` with the `pgvector` extension.
-- Embeddings are generated using Google Gemini embeddings (`models/text-embedding-004`).
-- A `DeterministicFallbackEmbeddings` model and `ResilientEmbeddingsWrapper` ensure local development and offline environments generate consistent, deterministic 768-dimensional vectors when external network egress is restricted.
+### 3.3 Dedicated Vector Embeddings with Qdrant Cloud
+Semantic document and policy retrieval is handled by a dedicated Qdrant vector database (`QdrantAuditVectorStore`), completely separate from relational transactions:
+- **Provider**: Qdrant Cloud Free (with automatic fallback to `QdrantClient(':memory:')` for offline unit testing).
+- **Tenant Isolation**: Mandatory payload filtering by `organization_id` and `engagement_id` prevents any cross-tenant or cross-engagement vector bleeding.
+- **Methods**: `upsert_chunks()`, `search()`, `delete_document_version()`, `reindex_document()`, and `healthcheck()`.
+- **Authoritative Math Guard**: Vector search is strictly restricted to policy, document, and contract language retrieval. Authoritative financial calculations, matching tolerances, and transaction reconciliation **never** rely on vector similarity.
 
 ---
 

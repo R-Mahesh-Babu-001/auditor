@@ -3,6 +3,8 @@
  * Connects frontend directly to FastAPI backend and Neon PostgreSQL.
  */
 
+import { safeStorage } from "../lib/safeStorage";
+
 const API_BASE = import.meta.env?.VITE_API_URL || "http://localhost:8000";
 
 async function request(endpoint, options = {}) {
@@ -11,6 +13,11 @@ async function request(endpoint, options = {}) {
     "Accept": "application/json",
     ...options.headers,
   };
+
+  const token = safeStorage.getItem("audit_token");
+  if (token && !headers["Authorization"]) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
   // Don't set Content-Type if sending FormData (browser sets boundary)
   if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
@@ -38,6 +45,8 @@ export const api = {
   getReady: () => request("/ready"),
 
   // Auth & Context
+  login: (email, password) =>
+    request("/api/auth/token", { method: "POST", body: JSON.stringify({ email, password }) }),
   getCurrentUser: () => request("/api/auth/me"),
 
   // Dashboard
@@ -97,6 +106,8 @@ export const api = {
   generateWorkpaper: (data) =>
     request("/api/workpapers/generate", { method: "POST", body: JSON.stringify(data) }),
   getWorkpaperVersions: (id) => request(`/api/workpapers/${id}/versions`),
+  approveWorkpaper: (id, notes = "") =>
+    request(`/api/workpapers/${id}/approve`, { method: "POST", body: JSON.stringify({ notes }) }),
 
   // Remediation
   getRemediations: (params = {}) => {

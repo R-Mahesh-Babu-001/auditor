@@ -250,11 +250,15 @@ def trigger_audit_test(
         engagement_id=eff_eng_uuid,
         rule_code=rule_code,
         parameters=req.parameters or {},
+        selected_dataset_ids=req.selected_dataset_ids,
+        dataset_ids=req.dataset_ids,
         user_id=ctx.user_id,
     )
 
     if res.get("status") == "failed":
-        raise HTTPException(status_code=500, detail=res.get("error", "Test execution failed."))
+        err_code = res.get("error_code")
+        status_code = 400 if err_code in ("MISSING_DATASET_TYPE", "AMBIGUOUS_DATASET_SELECTION", "DATASET_NOT_FOUND", "INVALID_DATASET_ID") else 500
+        raise HTTPException(status_code=status_code, detail=res.get("error", "Test execution failed."))
 
     # Return normalized response compatible with all callers
     pop_count = res.get("population_count", 0)

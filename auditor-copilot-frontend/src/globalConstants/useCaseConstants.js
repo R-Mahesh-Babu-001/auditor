@@ -1,5 +1,45 @@
 export const starterSuggestionsArray = [
     {
+        id: "p2p-audit",
+        label: "P2P Audit Tests & Workpapers",
+        heroMessage: "Execute deterministic P2P audit tests, investigate exceptions, and generate evidence-linked workpapers.",
+        promptOptionsMessage: "Select a P2P audit procedure or workflow to run...",
+        color: "bg-emerald-100 text-emerald-800 border-emerald-300",
+        topics: [
+            {
+                label: "Deterministic Tests",
+                color: "bg-indigo-100 text-indigo-800 border-indigo-300",
+                prompts: [
+                    "Run Three-Way Match across Purchase Orders, Goods Receipts, and Invoices with 1% price tolerance.",
+                    "Execute Duplicate Invoice & Payment test to detect identical or proximate vendor billings.",
+                    "Verify Missing Invoice Approvals against delegated authorization limits for invoices over $1,000.",
+                    "Check for Purchase Threshold Splitting just below $10,000 approval limits.",
+                    "Identify Period Cut-Off errors and unrecorded liabilities for goods received before period end.",
+                    "Detect high-risk payments released within 14 days of vendor bank account modifications.",
+                    "Scan Supplier Master for duplicate tax IDs, IBANs, or company names."
+                ]
+            },
+            {
+                label: "Workpaper & Findings",
+                color: "bg-amber-100 text-amber-800 border-amber-300",
+                prompts: [
+                    "Draft an executive P2P testing summary workpaper grounded on tested exception counts.",
+                    "Review open exceptions and link supporting invoice records to confirmed findings.",
+                    "Compile verified criteria and test run population metrics for reviewer sign-off."
+                ]
+            },
+            {
+                label: "ITGC & Governance",
+                color: "bg-blue-100 text-blue-800 border-blue-300",
+                prompts: [
+                    "Audit Segregation of Duties (SoD) conflicts between PO creation and Invoice approval.",
+                    "Verify terminated employee access revocation within 24 hours of separation.",
+                    "Evaluate third-party vendor risk and AI system inventory governance."
+                ]
+            }
+        ]
+    },
+    {
         id: "digital-audit",
         label: "Digital Audit",
         heroMessage : "Enhance your digital audit process with AI-driven insights.",

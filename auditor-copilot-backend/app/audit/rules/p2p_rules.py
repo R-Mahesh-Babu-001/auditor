@@ -81,6 +81,7 @@ def run_three_way_match(
                 "observed_values": {"po_currency": po_curr, "invoice_currency": inv_curr},
                 "expected_values": {"matched_currency": po_curr},
                 "invoice": inv,
+                "po": po,
             })
             continue
 
@@ -96,6 +97,7 @@ def run_three_way_match(
                 "observed_values": {"invoice_number": inv_no, "po_number": po_no, "receipt_count": 0},
                 "expected_values": {"goods_receipt": "Receipt document confirming delivery"},
                 "invoice": inv,
+                "po": po,
             })
             continue
 
@@ -112,6 +114,8 @@ def run_three_way_match(
                 "observed_values": {"invoiced_quantity": inv_qty, "received_quantity": total_received_qty},
                 "expected_values": {"max_invoiced_quantity": total_received_qty},
                 "invoice": inv,
+                "po": po,
+                "receipts": matched_receipts,
             })
             continue
 
@@ -129,6 +133,8 @@ def run_three_way_match(
                 "observed_values": {"invoice_amount": inv_amount, "po_amount": po_amount, "variance": amount_diff},
                 "expected_values": {"max_allowed": po_amount + min(tolerance_amount, po_amount * (tolerance_pct / 100.0))},
                 "invoice": inv,
+                "po": po,
+                "receipts": matched_receipts,
             })
         else:
             passed_count += 1
@@ -186,6 +192,7 @@ def run_duplicate_invoice_payment(
                 },
                 "expected_values": {"unique_invoice_rule": "Each invoice per supplier must be unique"},
                 "invoice": inv,
+                "prior_invoice": orig,
             })
         else:
             seen_invoices[exact_key] = inv
@@ -209,6 +216,7 @@ def run_duplicate_invoice_payment(
                             },
                             "expected_values": {"verification": "Confirm separate deliveries or distinct billing periods"},
                             "invoice": inv,
+                            "prior_invoice": prior_inv,
                         })
             supplier_amount_map.setdefault(amount_key, []).append(inv)
             passed_count += 1
@@ -406,6 +414,7 @@ def run_po_invoice_mismatch(
                 "observed_values": {"invoice_supplier": inv_supp, "po_supplier": po_supp},
                 "expected_values": {"matched_supplier": po_supp},
                 "invoice": inv,
+                "po": matched_po,
             })
             continue
 
@@ -473,6 +482,7 @@ def run_period_cutoff_check(
                         "observed_values": {"goods_receipt_date": str(rec_date), "invoice_date": str(inv_date), "period_end": str(period_end_date)},
                         "expected_values": {"accrual_policy": "Goods received on or before period-end must be accrued in current period"},
                         "invoice": inv,
+                        "receipt": rec,
                     })
                     continue
 

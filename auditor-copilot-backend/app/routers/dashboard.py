@@ -196,7 +196,7 @@ def get_dashboard_kpis(
             "llm_provider": "Google Gemini",
             "model": settings.GEMINI_MODEL,
             "database": "Neon PostgreSQL (schema: audit_copilot)",
-            "vector_store": "Neon PGVector",
+            "vector_store": "Qdrant (Vector DB)",
             "deterministic_audit_engine": "Active",
         }
     }

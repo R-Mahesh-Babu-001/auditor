@@ -4,7 +4,7 @@ import Papa from "papaparse";
 import mammoth from "mammoth";
 import * as pdfjsLib from "pdfjs-dist";
 import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
-import secureLocalStorage from "react-secure-storage";
+import safeStorage from "../../lib/safeStorage";
 
 // Set PDF worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
@@ -93,14 +93,14 @@ export const uploadFileAPI = async (file) => {
       console.warn("Unsupported file type:", fileType);
     }
 
-    // Save file content securely
-    secureLocalStorage.setItem(`FILE-DIRECTORY-${file.name}`, fileContent);
+    // Save file content safely
+    safeStorage.setItem(`FILE-DIRECTORY-${file.name}`, fileContent);
 
     // Update the list of stored file keys
-    let keys = secureLocalStorage.getItem("FILE-DIRECTORY-KEYS") || [];
+    let keys = safeStorage.getItem("FILE-DIRECTORY-KEYS") || [];
     if (!keys.includes(`FILE-DIRECTORY-${file.name}`)) {
       keys.push(`FILE-DIRECTORY-${file.name}`);
-      secureLocalStorage.setItem("FILE-DIRECTORY-KEYS", keys);
+      safeStorage.setItem("FILE-DIRECTORY-KEYS", keys);
     }
     // //Logic to upload file
     // const response = await axios.post(

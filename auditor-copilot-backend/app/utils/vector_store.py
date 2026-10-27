@@ -255,10 +255,14 @@ def get_vector_store(
     user_id: Optional[str] = None,
     mode: Optional[str] = None,
 ) -> Any:
-    """Return a Neon PostgreSQL vector store instance for the given collection/namespace.
-
-    This supports agent-scoped and user-scoped namespaces to ensure memory isolation.
+    """Return a vector store instance for the given collection/namespace.
+    Uses Qdrant when VECTOR_STORE_PROVIDER=='qdrant', else Neon PGVector.
     """
+    provider = getattr(settings, "VECTOR_STORE_PROVIDER", "qdrant").lower()
+    if provider == "qdrant":
+        from app.utils.qdrant_store import get_qdrant_vector_store
+        return get_qdrant_vector_store()
+
     coll = _build_collection_name(collection_name, agent=agent, user_id=user_id, mode=mode)
 
     if coll not in _in_memory_stores:

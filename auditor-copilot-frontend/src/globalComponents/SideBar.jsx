@@ -135,7 +135,6 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           {!collapsed && (
             <div className="ml-2.5 overflow-hidden">
               <p className="text-xs font-semibold text-foreground truncate">Lead Internal Auditor</p>
-              <p className="text-[10px] text-muted-foreground truncate">Neon / Gemini Authenticated</p>
             </div>
           )}
         </div>

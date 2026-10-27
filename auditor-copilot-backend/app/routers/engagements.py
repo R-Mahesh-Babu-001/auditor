@@ -1,5 +1,6 @@
 """
 Engagements router for managing audit engagement lifecycles, objectives, and scope.
+Enforces multi-tenant isolation.
 """
 
 import uuid
@@ -11,7 +12,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models import AuditEngagement, EngagementMembership, Organization
 from app.schemas import EngagementCreate, EngagementResponse
-from app.routers.auth import get_default_context
+from app.routers.auth import OrganizationContext, get_current_context
 
 router = APIRouter(prefix="/engagements", tags=["Engagements"])
 
@@ -19,11 +20,11 @@ router = APIRouter(prefix="/engagements", tags=["Engagements"])
 @router.get("")
 def list_engagements(
     status: Optional[str] = None,
+    ctx: OrganizationContext = Depends(get_current_context),
     db: Session = Depends(get_db),
 ):
     """List all audit engagements for the current organization."""
-    org, _ = get_default_context(db)
-    query = db.query(AuditEngagement).filter(AuditEngagement.organization_id == org.id)
+    query = db.query(AuditEngagement).filter(AuditEngagement.organization_id == ctx.organization_id)
     if status:
         query = query.filter(AuditEngagement.status == status)
     engagements = query.order_by(AuditEngagement.created_at.desc()).all()
@@ -51,13 +52,12 @@ def list_engagements(
 @router.post("")
 def create_engagement(
     req: EngagementCreate,
+    ctx: OrganizationContext = Depends(get_current_context),
     db: Session = Depends(get_db),
 ):
     """Create a new audit engagement with scope and objectives."""
-    org, user = get_default_context(db)
-
     engagement = AuditEngagement(
-        organization_id=org.id,
+        organization_id=ctx.organization_id,
         engagement_code=req.engagement_code,
         name=req.name,
         audit_type=req.audit_type,
@@ -68,17 +68,17 @@ def create_engagement(
         period_end=req.period_end,
         status="planning",
         overall_risk=req.overall_risk or "medium",
-        lead_user_id=user.id,
-        created_by=user.id,
+        lead_user_id=ctx.user_id,
+        created_by=ctx.user_id,
     )
     db.add(engagement)
     db.flush()
 
     # Add creator as lead auditor
     membership = EngagementMembership(
-        organization_id=org.id,
+        organization_id=ctx.organization_id,
         engagement_id=engagement.id,
-        user_id=user.id,
+        user_id=ctx.user_id,
         engagement_role="lead_auditor",
     )
     db.add(membership)
@@ -95,22 +95,22 @@ def create_engagement(
 @router.get("/{engagement_id}")
 def get_engagement_details(
     engagement_id: str,
+    ctx: OrganizationContext = Depends(get_current_context),
     db: Session = Depends(get_db),
 ):
-    """Get full details of a specific audit engagement."""
-    org, _ = get_default_context(db)
+    """Get full details of a specific audit engagement with tenant verification."""
     try:
         e_uuid = uuid.UUID(engagement_id)
     except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid engagement UUID.")
+        raise HTTPException(status_code=400, detail="Invalid engagement UUID format.")
 
-    engagement = db.query(AuditEngagement).filter(
-        AuditEngagement.id == e_uuid,
-        AuditEngagement.organization_id == org.id,
-    ).first()
+    engagement = db.query(AuditEngagement).filter(AuditEngagement.id == e_uuid).first()
 
     if not engagement:
         raise HTTPException(status_code=404, detail="Engagement not found.")
+
+    if engagement.organization_id != ctx.organization_id:
+        raise HTTPException(status_code=403, detail="Forbidden: Cross-tenant engagement access denied.")
 
     return {
         "id": str(engagement.id),
@@ -127,4 +127,3 @@ def get_engagement_details(
         "overall_risk": engagement.overall_risk,
         "created_at": engagement.created_at.isoformat() if engagement.created_at else None,
     }
-

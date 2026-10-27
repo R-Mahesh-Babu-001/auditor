@@ -58,6 +58,27 @@ class TestRunRequest(BaseModel):
     template_code: Optional[str] = None
     engagement_id: Optional[str] = None
     parameters: Optional[Dict[str, Any]] = None
+    selected_dataset_ids: Optional[Dict[str, str]] = None  # maps dataset_type -> dataset_id
+    dataset_ids: Optional[List[str]] = None  # optional list of dataset IDs
+
+
+class TokenRequest(BaseModel):
+    email: str
+    password: Optional[str] = None
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    expires_in: int
+    user_id: str
+    email: str
+    role: str
+    organization_id: str
+
+
+class WorkpaperApproveRequest(BaseModel):
+    notes: Optional[str] = None
 
 
 class ExceptionDispositionRequest(BaseModel):

@@ -3,11 +3,15 @@
 AuditReady Copilot is an evidence-first, enterprise AI internal audit workspace engineered specifically for Procure-to-Pay (P2P) audits, IT General Controls (ITGC) segregation of duties reviews, and continuous monitoring.
 
 The system features:
-- **Relational Persistence**: Neon Serverless PostgreSQL with explicit qualification under the `audit_copilot` schema (47 tables).
-- **Vector Retrieval**: Neon PGVector (`langchain_postgres.vectorstores.PGVector`) replacing legacy ChromaDB.
-- **Exclusive LLM Provider**: Google Gemini (`gemini-2.5-flash`, `gemini-2.5-pro`) exclusively powering intelligent workpaper synthesis, semantic claims mapping, and advisory chat. All Azure OpenAI and AWS Bedrock runtime paths have been removed.
-- **Deterministic Audit Testing Engine**: Pure, explainable Python rules for 3-way matching, duplicate detection, authorization threshold verification, split-purchase risk signals, and reproducible stratified sampling. Zero hallucination risk on numerical audit calculations.
-- **Full-Featured React Frontend**: Vite + React workspace providing executive dashboards, engagement tracking, dataset profiling, RCM coverage, exception triage, workpapers with claim citations, and remediation tracking.
+- **Authoritative Relational Persistence**: Neon Serverless PostgreSQL with explicit qualification under the `audit_copilot` schema (47 tables).
+- **Dedicated Vector Database**: Qdrant Cloud Free (`QdrantAuditVectorStore`) with native `:memory:` fallback for policy, document, and contract semantic search with strict tenant/engagement metadata filtering. Authoritative financial calculations and transaction reconciliation NEVER rely on vector similarity.
+- **Exclusive Generative LLM Provider**: Google Gemini (`gemini-3.5-flash`, `gemini-2.5-pro`) exclusively powering intelligent workpaper synthesis, semantic claims mapping, and advisory chat.
+- **Dataset-Specific Deterministic Audit Engine**: Pure, explainable Python rules for 3-way matching, duplicate detection, authorization threshold verification, split-purchase risk signals, period cutoff review, and reproducible stratified sampling. Each rule declares required canonical dataset types (`purchase_orders`, `goods_receipts`, `invoices`, `payments`, `approvals`, `suppliers`, `user_access`, `employee_directory`, `ai_system_inventory`) and rejects missing or ambiguous selections.
+- **Complete Evidence & Source Row Traceability**: Every identified exception automatically links and persists all contributing source rows (`ExceptionRowLink`) and supporting documents (`ExceptionEvidenceLink`) in Neon DB.
+- **Genuine Authentication & Authorization**: JWT Bearer token authentication, 401 unauthenticated enforcement in production/strict mode, 403 cross-tenant isolation, and role gates (Auditor, Reviewer, Manager, Org Admin) requiring reviewer approval for workpapers and findings.
+- **Truthful Dataset Profiling**: Canonical field mapping, SHA-256 file deduplication, and row-level validation metrics (`valid_row_count`, `invalid_row_count`, `validation_errors`).
+- **Structured Facts Workpaper Generation**: Compiles deterministic facts packet with SHA-256 snapshot hashing (`input_snapshot_hash`), structured narrative generation, and mandatory human reviewer approval gate (`POST /api/workpapers/{id}/approve`).
+- **Interactive React Frontend**: Vite + React 19 workspace with executive KPIs, engagement tracking, dataset profiling, RCM coverage, exception triage, workpapers, Prompt Library, and remediation tracking.
 
 ---
 
@@ -17,31 +21,32 @@ The system features:
 +-------------------------------------------------------------------------+
 |                  React / Vite Audit Workspace Frontend                  |
 |  - Executive Dashboard (Live Neon KPIs)    - RCM Explorer & Coverage    |
-|  - Engagements & Scopes                    - Deterministic Test Runs    |
-|  - Evidence & CSV/Excel Ledger Profiler    - Exceptions Triage Queue    |
-|  - Workpapers & Claim Citations            - Remediation Tracking       |
-|  - ITGC & SoD Review                       - Continuous Auditing        |
+|  - Engagements & Multi-Tenant Context      - Deterministic Test Runs    |
+|  - Datasets & Ledger Profiler              - Exceptions Triage Queue    |
+|  - Workpapers & Reviewer Sign-Off          - Remediation Tracking       |
+|  - Prompt Library with P2P Workflows       - Continuous Auditing        |
 +-------------------------------------------------------------------------+
-                                    | (REST APIs)
+                                    | (REST APIs with JWT Bearer Token)
                                     v
 +-------------------------------------------------------------------------+
 |                        FastAPI Backend Engine                           |
-|  - Health & Diagnostics (/health, /ready)                               |
-|  - Context & Tenancy (/api/auth/me)                                     |
-|  - Evidence Hashing & Processing (/api/evidence, /api/datasets)         |
-|  - Deterministic Rule Engine (/api/tests/run)                            |
-|  - Exceptions & Disposition (/api/exceptions)                           |
-|  - Workpaper Synthesis with Gemini (/api/workpapers/generate)           |
+|  - Auth & Context Guard (/api/auth/token, /api/auth/me)                 |
+|  - Health & Diagnostics (/health, /ready - Neon, Qdrant, Gemini)        |
+|  - Datasets & Truthful Validation (/api/datasets)                       |
+|  - Deterministic Rule Engine (/api/tests/run)                           |
+|  - Exceptions & Source Row Traceability (/api/exceptions)               |
+|  - Gemini Workpaper Synthesis & Sign-Off (/api/workpapers)              |
 +-------------------------------------------------------------------------+
-                    |                                 |
-       (Deterministic SQL & PGVector)       (Workpaper Synthesis & Chat)
-                    v                                 v
-+----------------------------------------+ +------------------------------+
-|            Neon PostgreSQL             | |        Google Gemini         |
-| - Schema: audit_copilot (47 tables)    | | - gemini-2.5-flash           |
-| - Extensions: vector (pgvector), pgcrypto| - google-genai SDK           |
-| - Connection Pooling (PgBouncer)       | | - langchain-google-genai     |
-+----------------------------------------+ +------------------------------+
+          |                         |                         |
+(Deterministic SQL)        (Semantic Retrieval)      (Grounded Synthesis)
+          v                         v                         v
++-----------------------+ +--------------------+ +------------------------+
+|    Neon PostgreSQL    | | Qdrant Vector DB   | |     Google Gemini      |
+| - Schema: audit_copilot| - Qdrant Cloud Free | | - gemini-3.5-flash     |
+|   (47 tables)         | - Local :memory:     | | - Pydantic structured  |
+| - Relational storage  | - Tenant isolated    | |   workpaper narrative  |
+| - Connection pooling  | - Document search    | | - google-genai SDK     |
++-----------------------+ +--------------------+ +------------------------+
 ```
 
 ---
@@ -53,6 +58,7 @@ The system features:
 - Node.js 18+ and npm
 - Neon PostgreSQL connection string (`DATABASE_URL`)
 - Google Gemini API key (`GEMINI_API_KEY`)
+- Qdrant Cloud URL & Key (`QDRANT_URL`, `QDRANT_API_KEY`) or in-memory mode
 
 ### 2. Backend Configuration & Startup
 
@@ -66,18 +72,14 @@ cp .env.example .env
 # Configure your secrets in .env
 # DATABASE_URL=postgresql://user:password@ep-sample-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
 # GEMINI_API_KEY=your_gemini_api_key
+# QDRANT_URL=https://your-cluster.qdrant.io
+# QDRANT_API_KEY=your_qdrant_key
 
 # Activate virtual environment
 source .venv/bin/activate
 
-# Install dependencies (if not already installed)
-pip install -r requirements.txt
-
-# Run deterministic audit unit tests
-PYTHONPATH=. python tests/test_audit_rules.py
-
-# Run Neon integration tests
-PYTHONPATH=. python tests/test_neon_integration.py
+# Run automated test suites (47 tests)
+PYTHONPATH=. pytest tests/ -v
 
 # Start FastAPI server
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
@@ -90,71 +92,31 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 cd auditor-copilot-frontend
 
 # Install dependencies
-npm ci
+npm install
 
-# Run linting check
-npm run lint
-
-# Build production bundle
+# Build for production
 npm run build
 
 # Start development server
 npm run dev
 ```
 
-Frontend will run at `http://localhost:3000` (or `http://localhost:5173`).
-
 ---
 
-## Health Check & Verification
+## Automated Test Coverage
 
-Verify the backend and database connection:
+The test suite includes 47 automated tests covering all critical components:
 
-```bash
-curl http://localhost:8000/health
-```
-
-Expected Response:
-```json
-{
-  "status": "ok",
-  "database": {
-    "backend": "neon_pgvector",
-    "neon_configured": true,
-    "neon_status": "connected",
-    "schema": "audit_copilot"
-  },
-  "llm_provider": {
-    "primary": "google_gemini",
-    "gemini_model": "gemini-2.5-flash",
-    "gemini_configured": true
-  }
-}
-```
-
-Verify service readiness:
-```bash
-curl http://localhost:8000/ready
-```
-
----
-
-## Core Audit Procedures Implemented
-
-| Rule Code | Procedure Type | Description |
-| :--- | :--- | :--- |
-| `P2P_THREE_WAY_MATCH` | Deterministic | Matches PO, Goods Receipt, and Invoice lines; flags quantity variances, price variances beyond tolerance %, missing PO, and missing receipt. |
-| `P2P_DUPLICATE_INVOICE_PAYMENT` | Deterministic | Identifies exact duplicate invoice numbers/amounts per supplier, and proximate-date duplicate billing amounts. |
-| `P2P_MISSING_APPROVAL` | Deterministic | Checks invoice amounts exceeding delegation of authority (DOA) limits for authorized supervisor approvals. |
-| `P2P_THRESHOLD_SPLITTING` | Risk Signal | Detects structured purchases clustered just below procurement approval limits (e.g., $9,500 on a $10,000 threshold). |
-| `P2P_SAMPLE_SELECTION` | Sampling | Reproducible, deterministic stratified sampling based on transaction values and fixed pseudo-random seeds. |
-| `ITGC_SOD_CONFLICT` | IT Governance | Flags incompatible role combinations (e.g. PO Creation + Invoice Approval, Vendor Master Maintenance + Payment Release). |
-| `ITGC_LEAVER_ACCESS` | IT Governance | Flags terminated employees who retain active system accounts in ERP ledgers. |
-| `VENDOR_ASSURANCE_REVIEW` | Vendor Governance | Checks high-risk vendors for unexpired SOC 1/2 Type II reports and ISO 27001 certifications. |
-| `AI_GOVERNANCE_REVIEW` | AI Governance | Audits corporate AI systems inventory for system owners, risk tier classifications, and monitoring plans (NIST AI RMF). |
-
----
-
-## License & Security
-Enterprise confidential. Credentials and sensitive financial evidence must remain within encrypted customer storage and tenant-isolated Neon PostgreSQL schemas.
-
+| Test Suite | Purpose | Tests | Status |
+|:---|:---|:---:|:---:|
+| `test_dataset_selection.py` | Canonical rule specs, distinct collections, missing & ambiguous dataset errors, decimal precision | 6 | PASSED |
+| `test_auth_security.py` | JWT token issuance/verification, 401 unauthenticated, 403 cross-tenant isolation, reviewer role gate | 6 | PASSED |
+| `test_evidence_linking.py` | Multi-row `ExceptionRowLink` persistence for 3-way match, duplicate invoices, and PO mismatch | 2 | PASSED |
+| `test_qdrant_integration.py` | Qdrant Cloud / :memory: upsert, semantic search, document deletion, multi-tenant filtering, healthcheck | 4 | PASSED |
+| `test_workpaper_generation.py` | Verified facts packet hashing (`input_snapshot_hash`), draft status, reviewer approval gate | 2 | PASSED |
+| `test_e2e_p2p_flow.py` | Complete synthetic P2P lifecycle (3-way match, duplicate, missing approval, cutoff, workpaper sign-off) | 5 | PASSED |
+| `test_audit_rules.py` | Deterministic unit tests across all P2P, ITGC SoD, Vendor, and AI governance rules | 14 | PASSED |
+| `test_api_smoke.py` | Health endpoints, memory clearing, system status | 2 | PASSED |
+| `test_neon_integration.py` | Database connectivity, schema verification, collection naming logic | 4 | PASSED |
+| `test_corporate_agent.py` | Corporate agent streaming and ingest smoke tests | 2 | PASSED |
+| **Total** | | **47** | **ALL PASSED** |

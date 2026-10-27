@@ -98,3 +98,7 @@ psycopg2-binary>=2.9.9
 asyncpg>=0.29.0
 langchain-google-genai>=2.0.0
 google-genai>=1.0.0
+qdrant-client>=1.10.0
+pyjwt>=2.8.0
+pytest>=8.0.0
+

@@ -1,5 +1,6 @@
 """
 Exceptions router for triage, evidence investigation, and human review decisions.
+Provides full source row traceability and enforces multi-tenant isolation.
 """
 
 import uuid
@@ -9,9 +10,19 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.models import AuditException, AuditEventLog
+from app.models import (
+    AuditException,
+    AuditEventLog,
+    ExceptionRowLink,
+    DatasetRow,
+    ExceptionEvidenceLink,
+)
 from app.schemas import ExceptionDispositionRequest
-from app.routers.auth import get_default_context
+from app.routers.auth import (
+    OrganizationContext,
+    get_current_context,
+    require_reviewer_role,
+)
 
 router = APIRouter(prefix="/exceptions", tags=["Exceptions & Triage"])
 
@@ -22,14 +33,15 @@ def list_exceptions(
     status: Optional[str] = None,
     severity: Optional[str] = None,
     limit: int = 50,
+    ctx: OrganizationContext = Depends(get_current_context),
     db: Session = Depends(get_db),
 ):
     """List exceptions filterable by engagement, status, and severity."""
-    org, _ = get_default_context(db)
-    query = db.query(AuditException).filter(AuditException.organization_id == org.id)
-    if engagement_id:
+    query = db.query(AuditException).filter(AuditException.organization_id == ctx.organization_id)
+    eff_eng_id = engagement_id or (str(ctx.engagement_id) if ctx.engagement_id else None)
+    if eff_eng_id:
         try:
-            query = query.filter(AuditException.engagement_id == uuid.UUID(engagement_id))
+            query = query.filter(AuditException.engagement_id == uuid.UUID(eff_eng_id))
         except ValueError:
             pass
     if status:
@@ -60,10 +72,10 @@ def list_exceptions(
 @router.get("/{exception_id}")
 def get_exception_details(
     exception_id: str,
+    ctx: OrganizationContext = Depends(get_current_context),
     db: Session = Depends(get_db),
 ):
     """Retrieve full details, observed/expected records, and evidence links for an exception."""
-    org, _ = get_default_context(db)
     try:
         exc_uuid = uuid.UUID(exception_id)
     except ValueError:
@@ -71,11 +83,31 @@ def get_exception_details(
 
     exc = db.query(AuditException).filter(
         AuditException.id == exc_uuid,
-        AuditException.organization_id == org.id,
+        AuditException.organization_id == ctx.organization_id,
     ).first()
 
     if not exc:
         raise HTTPException(status_code=404, detail="Exception not found.")
+
+    # Retrieve associated source rows
+    row_links = db.query(ExceptionRowLink).filter(
+        ExceptionRowLink.exception_id == exc.id,
+        ExceptionRowLink.organization_id == ctx.organization_id,
+    ).all()
+
+    linked_rows = []
+    for rl in row_links:
+        row = db.query(DatasetRow).filter(
+            DatasetRow.id == rl.dataset_row_id,
+            DatasetRow.organization_id == ctx.organization_id,
+        ).first()
+        linked_rows.append({
+            "dataset_id": str(rl.dataset_id),
+            "dataset_row_id": str(rl.dataset_row_id),
+            "link_role": rl.link_role,
+            "row_number": row.row_number if row else None,
+            "data": (row.normalized_data or row.raw_data) if row else {},
+        })
 
     return {
         "id": str(exc.id),
@@ -90,6 +122,7 @@ def get_exception_details(
         "rationale": exc.rationale,
         "resolution_code": exc.resolution_code,
         "resolution_notes": exc.resolution_notes,
+        "source_rows": linked_rows,
         "created_at": exc.created_at.isoformat() if exc.created_at else None,
     }
 
@@ -98,10 +131,10 @@ def get_exception_details(
 def submit_exception_disposition(
     exception_id: str,
     req: ExceptionDispositionRequest,
+    ctx: OrganizationContext = Depends(get_current_context),
     db: Session = Depends(get_db),
 ):
     """Record human auditor disposition review decision (confirmed finding, false positive, accepted, etc.)."""
-    org, user = get_default_context(db)
     try:
         exc_uuid = uuid.UUID(exception_id)
     except ValueError:
@@ -109,31 +142,39 @@ def submit_exception_disposition(
 
     exc = db.query(AuditException).filter(
         AuditException.id == exc_uuid,
-        AuditException.organization_id == org.id,
+        AuditException.organization_id == ctx.organization_id,
     ).first()
 
     if not exc:
         raise HTTPException(status_code=404, detail="Exception not found.")
 
+    # If closing or accepting exception, verify reviewer role
+    if req.status in ("closed", "accepted_exception"):
+        allowed_roles = {"audit_manager", "reviewer", "admin", "org_admin", "lead_auditor"}
+        if ctx.role.lower() not in allowed_roles:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Closing or accepting exceptions requires Reviewer or Manager role. Current role is '{ctx.role}'."
+            )
+
     before_status = exc.status
     exc.status = req.status
     exc.resolution_code = req.resolution_code or req.status
     exc.resolution_notes = req.resolution_notes
-    exc.reviewed_by = user.id
+    exc.reviewed_by = ctx.user_id
     exc.reviewed_at = datetime.utcnow()
     if req.status in ("closed", "false_positive", "accepted_exception"):
         exc.closed_at = datetime.utcnow()
 
     # Log audit event
     event = AuditEventLog(
-        organization_id=org.id,
+        organization_id=ctx.organization_id,
         engagement_id=exc.engagement_id,
-        actor_user_id=user.id,
+        actor_user_id=ctx.user_id,
         event_type="exception_disposition",
         entity_type="audit_exceptions",
         entity_id=exc.id,
-        action=f"Changed status from {before_status} to {req.status}",
-        event_metadata={"reason": req.resolution_notes},
+        event_metadata={"action": f"Changed status from {before_status} to {req.status}", "reason": req.resolution_notes},
     )
     db.add(event)
     db.commit()
@@ -144,4 +185,3 @@ def submit_exception_disposition(
         "new_status": exc.status,
         "reviewed_at": exc.reviewed_at.isoformat(),
     }
-
